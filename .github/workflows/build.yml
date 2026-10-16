@@ -1,31 +1,31 @@
 name: Build Windows EXE
- 
+
 on:
   push:
   workflow_dispatch:
- 
+
 jobs:
   build:
     runs-on: windows-latest
- 
+
     env:
       EnableWindowsTargeting: "true"
- 
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
- 
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
- 
+
       - name: Restore
-        run: dotnet restore windows/OpenSstpWin/OpenSstpWin.csproj -r win-x64 -p:EnableWindowsTargeting=true
- 
+        run: dotnet restore OpenSstpWin.csproj -r win-x64 -p:EnableWindowsTargeting=true
+
       - name: Publish single-file EXE
         run: >
-          dotnet publish windows/OpenSstpWin/OpenSstpWin.csproj
+          dotnet publish OpenSstpWin.csproj
           -c Release
           -r win-x64
           --self-contained true
@@ -35,7 +35,7 @@ jobs:
           -p:EnableCompressionInSingleFile=true
           -p:IncludeNativeLibrariesForSelfExtract=true
           -o out
- 
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
